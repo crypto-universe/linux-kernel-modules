@@ -1,0 +1,12 @@
+make
+sudo mknod /dev/chardrv c 700 0
+ls -la /dev/chardrv
+sudo chmod a+rw /dev/chardrv
+ls -la /dev/chardrv
+sudo insmod solution.ko
+lsmod | grep solution
+cat /proc/modules | grep solution
+dmesg
+echo "!" > /dev/chardrv
+dmesg
+sudo rmmod solution.ko
