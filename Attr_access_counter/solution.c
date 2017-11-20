@@ -41,5 +41,5 @@ static void __exit cleanup_device(void) {
 module_init (init_device);
 module_exit (cleanup_device);
 
-MODULE_LICENSE("MIT");
+MODULE_LICENSE("GPL");
 MODULE_AUTHOR("crypto-universe")

@@ -9,5 +9,5 @@ void cleanup_module(void) {
 	printk(KERN_INFO "OK, OK, leaving kernel.\n");
 }
 
-MODULE_LICENSE("MIT");
+MODULE_LICENSE("GPL");
 MODULE_AUTHOR("crypto-universe")
