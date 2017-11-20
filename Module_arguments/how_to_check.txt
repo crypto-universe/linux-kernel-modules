@@ -1,0 +1,11 @@
+sudo insmod solution.ko a=5 b=7 c=-1,2
+cat /sys/kernel/my_kobject/my_sys
+# 13
+sudo rmmod solution.ko
+
+# Output in dmesg
+# [ 1749.311469] Hello from Dummy ;)
+# [ 1749.311471] a = 5, b = 7
+# [ 1749.311473] c[0] = -1, c[1] = 2, c[2] = 0, c[3] = 0, c[4] = 0
+# [ 1749.311474] Array size = 2
+# [ 1845.255245] OK, OK, leaving kernel.
