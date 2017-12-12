@@ -1,0 +1,6 @@
+make clean all
+sudo insmod solution.ko
+cat /sys/kernel/my_kobject/my_sys
+# Now you should see list of all loaded modules
+# in alphabetical order
+sudo rmmod solution 
