@@ -6,39 +6,45 @@ static struct kobject* device_kobject;
 
 #define DEVICE_NAME "Dummy"
 
+static void insert_in_sorted_arr(const unsigned int arr_size,
+		const char** str_arr, const char* str_to_add) {
+	unsigned int insertion_index = arr_size;
+	while(insertion_index > 0
+			&& strncmp(str_arr[insertion_index-1], str_to_add, MODULE_NAME_LEN) > 0) {
+		str_arr[insertion_index] = str_arr[insertion_index-1];
+		--insertion_index;
+	}
+	str_arr[insertion_index] = str_to_add;
+}
+
+static ssize_t print_str_arr_to_buffer(const unsigned int arr_size,
+		const char** arr_to_print, char* dst_buf) {
+	unsigned int i = 0;
+	ssize_t total_len_counter = 0;
+	for(i = 0; i < arr_size; i++) {
+		total_len_counter += sprintf(dst_buf+total_len_counter, "%s\n", arr_to_print[i]);
+	}
+	return total_len_counter;
+}
+
 static ssize_t my_sys_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
 {
 	// This module was loaded just now, so it is first in the module list.
 	// Getting prev element gives us real list head.
 	struct list_head* original_list_head = (THIS_MODULE->list).prev;
 
-	unsigned int i = 0;
-	unsigned int total_len_counter = 0;
-	unsigned int insertion_index = 0;
 	unsigned int mod_names_counter = 0;
-	char* mod_names[100];
+	const char* mod_names[100];
 	struct module* tmp = NULL;
-	char* curr_mod_name = NULL;
 	struct list_head* current_list_element = NULL;
 	
 	list_for_each(current_list_element, original_list_head) {
 		tmp = list_entry(current_list_element, struct module, list);
-		curr_mod_name = tmp->name;
-		
-		insertion_index = mod_names_counter;
-		while(insertion_index > 0
-				&& strncmp(mod_names[insertion_index-1], curr_mod_name, MODULE_NAME_LEN) > 0) {
-			mod_names[insertion_index] = mod_names[insertion_index-1];
-			--insertion_index;
-		}
-		mod_names[insertion_index] = curr_mod_name;
+		insert_in_sorted_arr(mod_names_counter, mod_names, tmp->name);
 		++mod_names_counter;
 	}
 	
-	for(i=0; i < mod_names_counter; i++) {
-		total_len_counter += sprintf(buf+total_len_counter, "%s\n", mod_names[i]);
-	}
-	return total_len_counter;
+	return print_str_arr_to_buffer(mod_names_counter, mod_names, buf);
 }
 
 static const struct kobj_attribute my_sys_attr = __ATTR_RO(my_sys);
