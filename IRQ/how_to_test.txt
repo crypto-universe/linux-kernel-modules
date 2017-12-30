@@ -1,0 +1,1 @@
+sudo bash -c ' echo +20 > /sys/class/rtc/rtc0/wakealarm '
