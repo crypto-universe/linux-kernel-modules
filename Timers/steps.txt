@@ -1,0 +1,4 @@
+make clean all
+sudo insmod hrt_single.ko delays=574,587,129,870,644,442,710,505,602
+dmesg
+sudo rmmod hrt_single
